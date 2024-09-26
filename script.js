@@ -15,15 +15,30 @@ async function connectWallet() {
 // Function to fetch live price data
 async function fetchPrice() {
     try {
-        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=your-token-id&vs_currencies=usdt');
+        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=usd-coin,matic-network,chr&vs_currencies=usdt');
         const data = await response.json();
-        const price = data['your-token-id'].usdt; // Replace 'your-token-id' with your actual token ID
-        document.getElementById('current-price').innerText = price;
+        
+        const usdtPrice = data['usd-coin'].usdt; // USDT
+        const maticPrice = data['matic-network'].usdt; // MATIC (used for POL as well)
+        const chrPrice = data['chr'].usdt; // CHR
+        
+        // Update price display
+        document.getElementById('current-price').innerText = `USDT: ${usdtPrice}, MATIC: ${maticPrice}, CHR: ${chrPrice}`;
 
         // Update to amount when from amount is changed
         document.getElementById('from-amount').addEventListener('input', function() {
             const amount = parseFloat(this.value) || 0;
-            const toAmount = (amount * price).toFixed(2); // Calculate USDT amount
+            const fromToken = document.getElementById('from-token').value;
+            let toAmount;
+
+            if (fromToken === 'usdt') {
+                toAmount = (amount * usdtPrice).toFixed(2);
+            } else if (fromToken === 'pol' || fromToken === 'matic') {
+                toAmount = (amount * maticPrice).toFixed(2);
+            } else if (fromToken === 'chr') {
+                toAmount = (amount * chrPrice).toFixed(2);
+            }
+
             document.getElementById('to-amount').value = toAmount;
         });
 
