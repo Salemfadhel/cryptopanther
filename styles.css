@@ -28,7 +28,8 @@ header {
     color: white;
     padding: 15px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .logo {
@@ -36,7 +37,26 @@ header {
     font-weight: bold;
 }
 
-.trade-section {
+button#connect-wallet {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+button#connect-wallet:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+button#connect-wallet:active {
+    transform: scale(0.95);
+}
+
+.trade-section, .chart-section {
     padding: 20px;
     background-color: white;
     margin: 20px;
@@ -76,9 +96,6 @@ footer {
     padding: 20px;
     background-color: rgba(58, 58, 58, 0.8);
     color: white;
-    position: relative;
-    bottom: 0;
-    width: 100%;
 }
 
 footer .social-media {
