@@ -14,7 +14,7 @@ async function connectWallet() {
 
 // Function to fetch live price data
 let usdtPrice = 0;
-let maticPrice = 0; // Use for POL as well
+let maticPrice = 0; // Used for POL as well
 let chrPrice = 0;
 
 async function fetchPrice() {
