@@ -17,31 +17,24 @@
     <main>
         <section class="trade-section">
             <h2>Trade Your Tokens</h2>
-            <form>
+            <form id="trade-form">
                 <label for="from-token">From:</label>
                 <select id="from-token">
                     <option value="chr">CHR</option>
-                    <option value="pol">POL</option>
+                    <option value="usdt">USDT</option>
                 </select>
-                <input type="number" placeholder="Amount" required>
+                <input type="number" id="from-amount" placeholder="Amount" required>
                 
                 <label for="to-token">To:</label>
                 <select id="to-token">
-                    <option value="pol">POL</option>
+                    <option value="usdt">USDT</option>
                     <option value="chr">CHR</option>
                 </select>
-                <input type="number" placeholder="Amount" required>
+                <input type="number" id="to-amount" placeholder="Amount" required readonly>
                 
                 <button type="submit">Swap</button>
             </form>
-        </section>
-        
-        <section class="chart-section">
-            <h2>Trading Chart</h2>
-            <iframe id="dextools-widget"
-                title="DEXTools Trading Chart"
-                width="500" height="400"
-                src="https://www.dextools.io/widget-chart/en/polygon/pe-light/0x4a3763cc17b49a71a6bd393dd3e7c32fb4283393?theme=light&chartType=2&chartResolution=30&drawingToolbars=false"></iframe>
+            <div id="price-info">Current Price: <span id="current-price">Loading...</span></div>
         </section>
     </main>
 
