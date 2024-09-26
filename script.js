@@ -13,39 +13,44 @@ async function connectWallet() {
 }
 
 // Function to fetch live price data
+let usdtPrice = 0;
+let maticPrice = 0; // Use for POL as well
+let chrPrice = 0;
+
 async function fetchPrice() {
     try {
         const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=usd-coin,matic-network,chr&vs_currencies=usdt');
         const data = await response.json();
         
-        const usdtPrice = data['usd-coin'].usdt; // USDT
-        const maticPrice = data['matic-network'].usdt; // MATIC (used for POL as well)
-        const chrPrice = data['chr'].usdt; // CHR
+        usdtPrice = data['usd-coin'].usdt; // USDT
+        maticPrice = data['matic-network'].usdt; // MATIC (POL)
+        chrPrice = data['chr'].usdt; // CHR
         
-        // Update price display
         document.getElementById('current-price').innerText = `USDT: ${usdtPrice}, MATIC: ${maticPrice}, CHR: ${chrPrice}`;
 
         // Update to amount when from amount is changed
-        document.getElementById('from-amount').addEventListener('input', function() {
-            const amount = parseFloat(this.value) || 0;
-            const fromToken = document.getElementById('from-token').value;
-            let toAmount;
-
-            if (fromToken === 'usdt') {
-                toAmount = (amount * usdtPrice).toFixed(2);
-            } else if (fromToken === 'pol' || fromToken === 'matic') {
-                toAmount = (amount * maticPrice).toFixed(2);
-            } else if (fromToken === 'chr') {
-                toAmount = (amount * chrPrice).toFixed(2);
-            }
-
-            document.getElementById('to-amount').value = toAmount;
-        });
-
+        updateToAmount();
     } catch (error) {
         console.error("Error fetching price data:", error);
         document.getElementById('current-price').innerText = "Error";
     }
+}
+
+// Function to update to amount based on from amount and selected tokens
+function updateToAmount() {
+    const fromAmount = parseFloat(document.getElementById('from-amount').value) || 0;
+    const fromToken = document.getElementById('from-token').value;
+    let toAmount;
+
+    if (fromToken === 'usdt') {
+        toAmount = (fromAmount * usdtPrice).toFixed(2);
+    } else if (fromToken === 'pol' || fromToken === 'matic') {
+        toAmount = (fromAmount * maticPrice).toFixed(2);
+    } else if (fromToken === 'chr') {
+        toAmount = (fromAmount * chrPrice).toFixed(2);
+    }
+
+    document.getElementById('to-amount').value = toAmount;
 }
 
 // Prevent same token selection in From and To
@@ -61,6 +66,8 @@ document.getElementById('from-token').addEventListener('change', function() {
             toTokenSelect.options[i].disabled = false;
         }
     }
+
+    updateToAmount(); // Update the amount when token changes
 });
 
 document.getElementById('to-token').addEventListener('change', function() {
@@ -75,7 +82,12 @@ document.getElementById('to-token').addEventListener('change', function() {
             fromTokenSelect.options[i].disabled = false;
         }
     }
+
+    updateToAmount(); // Update the amount when token changes
 });
+
+// Update to amount when from amount is changed
+document.getElementById('from-amount').addEventListener('input', updateToAmount);
 
 // Fetch price on load
 window.onload = fetchPrice;
