@@ -33,5 +33,34 @@ async function fetchPrice() {
     }
 }
 
+// Prevent same token selection in From and To
+document.getElementById('from-token').addEventListener('change', function() {
+    const fromValue = this.value;
+    const toTokenSelect = document.getElementById('to-token');
+
+    // Remove selected value from To token
+    for (let i = 0; i < toTokenSelect.options.length; i++) {
+        if (toTokenSelect.options[i].value === fromValue) {
+            toTokenSelect.options[i].disabled = true;
+        } else {
+            toTokenSelect.options[i].disabled = false;
+        }
+    }
+});
+
+document.getElementById('to-token').addEventListener('change', function() {
+    const toValue = this.value;
+    const fromTokenSelect = document.getElementById('from-token');
+
+    // Remove selected value from From token
+    for (let i = 0; i < fromTokenSelect.options.length; i++) {
+        if (fromTokenSelect.options[i].value === toValue) {
+            fromTokenSelect.options[i].disabled = true;
+        } else {
+            fromTokenSelect.options[i].disabled = false;
+        }
+    }
+});
+
 // Fetch price on load
 window.onload = fetchPrice;
